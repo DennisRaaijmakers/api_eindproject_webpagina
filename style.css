@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Anybody&display=swap');
+
+html{
+	background: linear-gradient(-45deg, #607DCF, #5C5869, #FACC3E , #020202 );
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+    font-family: 'Anybody', cursive;
+	color: black;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+		color: black;
+	}
+	50% {
+		background-position: 100% 50%;
+		color: black;
+	}
+	100% {
+		background-position: 0% 50%;
+		color: black;
+	}
+}
+
+html h2{
+	color: black;
+	font-weight: bold;
+}
+html div div label{
+	color: black;
+}
+html div table thead tr th{
+	color: black;
+}
+body{
+	border-radius: 20px;
+	padding-top: 10px;
+}
+body, table{
+  max-width: 70%;
+  margin: auto;
+  border: solid 3px black;
+  text-align: center;
+	background-color: white;
+
+}
+
+.padding_top, table{
+  padding-top: 10px;
+}
+table,td , th {
+  border-collapse: collapse;
+   width: 600px;
+  text-align: left;
+  border: solid 3px black
+}
+th{
+  background-color: darkgrey;
+}
+ul {
+    text-align: center;
+    list-style-position: inside;
+}
+
+.small_token{
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	max-width: 200px;
+}

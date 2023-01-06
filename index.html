@@ -1,0 +1,411 @@
+<html>
+<head>
+    <script defer src="https://unpkg.com/alpinejs@3.5.0/dist/cdn.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+<h2>Vraag een token aan:</h2>
+<div x-data="{
+        email: null,
+        password: null,
+        token: null,
+        async getToken() {
+           const paramsObj = {grant_type: '', username: this.email, password: this.password, scope: '', client_secret:''};
+           const searchParams = new URLSearchParams(paramsObj);
+           this.token = await (await fetch('http://127.0.0.1:8000/token',
+           {
+            method: 'POST',
+            body: searchParams,
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded',
+                'accept': 'application/json' ,
+            },
+            })).json();
+            console.log(this.token);
+        }
+    }">
+    <input type="text" x-model="email">
+    <input type="password" x-model="password">
+    <button x-on:click="getToken">get token</button>
+    <table>
+        <tr>
+            <td class="small_token" x-text="token.access_token"></td>
+        </tr>
+    </table>
+</div>
+
+
+<!--Geeft een lijst van alle spelers die bestaan in de database-->
+<h2>Alle namen van de spelers:</h2>
+
+<div x-data="{
+        players: null,
+        token: null,
+        async getAllPlayers() {
+            this.players = await (await fetch('http://127.0.0.1:8000/players/',
+        {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + 'token',
+                'accept': 'application/json' ,
+            },
+        })).json();
+        }
+    }">
+    <input x-model="token" placeholder="Validation">
+    <button x-on:click="getAllPlayers">Show players</button>
+    <table>
+        <tr>
+            <th colspan="2">
+                All players
+            </th>
+        </tr>
+        <template x-for="player in players">
+            <tr>
+                <td x-text="player.player_id">
+                </td>
+                <td x-text="player.name">
+                </td>
+            </tr>
+        </template>
+    </table>
+</div>
+
+
+<h2>Alle operators uit de lijst</h2>
+<div x-data="{
+        operators: null,
+        token: null,
+        async getAllOperators() {
+            this.op = await (await fetch('http://127.0.0.1:8000/operators/',
+        {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + 'token',
+                'accept': 'application/json' ,
+            },
+        })).json();
+        }
+    }">
+    <input x-model="token" placeholder="Validation">
+    <button x-on:click="getAllOperators">Show operators</button>
+    <table>
+        <tr>
+            <th colspan="3">
+                All operators
+            </th>
+        </tr>
+        <template x-for="op in operators">
+            <tr>
+                <td x-text="op.opp_id">
+                </td>
+                <td x-text="op.operator_name">
+                </td>
+                <td x-text="op.side">
+                </td>
+            </tr>
+        </template>
+    </table>
+</div>
+
+
+<!-- Maken van alle classes -->
+<div class="row">
+
+    <div class="col-4">
+        <h2>Maak een player aan:</h2>
+
+        <div x-data="{
+        responsedata: null,
+        fav_map_id: null,
+        username: null,
+        name: null,
+        email: null,
+        password: null,
+        mmr: null,
+        region: null,
+        async createPlayer() {
+            this.responsedata = await (await fetch('http://127.0.0.1:8000/player/',
+            {
+                method: 'POST',
+                body: JSON.stringify({
+                    fav_map_id: this.fav_map_id,
+                    username: this.username,
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                    mmr: this.mmr,
+                    region: this.region
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })).json();
+        },
+    }">
+            <div>
+                <input type="number" x-model="fav_map_id" placeholder="Favorite map ID"/>
+            </div>
+            <div>
+                <input type="text" x-model="username" placeholder="Username"/>
+            </div>
+            <div>
+                <input type="text" x-model="name" placeholder="Name"/>
+            </div>
+            <div>
+                <input type="email" x-model="email" placeholder="Email"/>
+            </div>
+            <div>
+                <input type="password" x-model="password" placeholder="Password"/>
+            </div>
+            <div>
+                <input type="number" x-model="mmr" placeholder="MMR"/>
+            </div>
+            <div>
+                <label>Europe</label>
+                <input type="radio" x-model="region" value="Europe"/>
+                <br>
+                <label>North America</label>
+                <input type="radio" x-model="region" value="North America"/>
+                <br>
+                <label>South America</label>
+                <input type="radio" x-model="region" value="South America"/>
+                <br>
+            </div>
+            <button x-on:click="createPlayer">Submit</button>
+        </div>
+
+    </div>
+
+    <div class="col-4">
+        <h2>Maak een operator aan:</h2>
+        <div x-data="{
+        responsedata: null,
+        operator_name: null,
+        primary_weapon: null,
+        secondary_weapon: null,
+        side: null,
+        async createOperator() {
+            this.responsedata = await (await fetch('http://127.0.0.1:8000/op/',
+            {
+                method: 'POST',
+                body: JSON.stringify({
+                    operator_name: this.operator_name,
+                    primary_weapon: this.primary_weapon,
+                    secondary_weapon: this.secondary_weapon,
+                    side: this.side
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })).json();
+        },
+    }">
+            <div>
+                <input type="text" x-model="operator_name" placeholder="Operator name"/>
+            </div>
+
+            <div>
+                <input type="text" x-model="primary_weapon" placeholder="Primary weapon"/>
+            </div>
+
+            <div>
+                <input type="text" x-model="secondary_weapon" placeholder="Secondary weapon"/>
+            </div>
+
+            <div>
+                <label>Attacker</label>
+                <input type="radio" x-model="side" value="Attacker"/>
+                <br>
+                <label>Defender</label>
+                <input type="radio" x-model="side" value="Defender"/>
+                <br>
+            </div>
+            <button x-on:click="createOperator">Submit</button>
+        </div>
+
+    </div>
+
+
+    <div class="col-4">
+        <h2>Maak een map aan:</h2>
+        <div x-data="{
+        responsedata: null,
+        map_name: null,
+        async createMap() {
+            this.responsedata = await (await fetch('http://127.0.0.1:8000/map/',
+            {
+                method: 'POST',
+                body: JSON.stringify({
+                    map_name: this.map_name
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })).json();
+        },
+    }">
+            <div>
+                <input type="text" x-model="map_name" placeholder="Map name"/>
+            </div>
+            <button x-on:click="createMap">Submit</button>
+        </div>
+    </div>
+</div>
+
+
+<br>
+<div class="row">
+    <div class="col-4">
+        <h2>Zoek een player met het ID</h2>
+        <div x-data="{
+                player: null,
+                player_id:null,
+                async playerById() {
+                id: null
+                if (this.player_id){
+                        this.id = this.player_id
+                    }
+                    this.player = await (await fetch('http://127.0.0.1:8000/get/player/' + this.id)).json();
+                    console.log(this.player)
+                }
+            }">
+            <input type="text" x-model="player_id">
+            <button x-on:click="playerById">Show player</button>
+            <table>
+                <th colspan="6">
+                    Player info
+                </th>
+
+                <tr>
+                    <td x-text="player.name">
+                    </td>
+                </tr>
+                <tr>
+                    <td x-text="player.username">
+                    </td>
+                </tr>
+                <tr>
+                    <td x-text="player.email">
+                    </td>
+                </tr>
+                <tr>
+                    <td x-text="player.mmr">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td x-text="player.region">
+                    </td>
+                </tr>
+                <tr>
+                    <td x-text="player.fav_map_id">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-4">
+        <h2>Zoek favorite map door player ID</h2>
+
+        <div x-data="{
+                fav_map: null,
+                player_id:null,
+                async getMapByPlayerId() {
+                id: null
+                if (this.player_id){
+                        this.id = this.player_id
+                    }
+                    this.fav_map = await (await fetch('http://127.0.0.1:8000/get/player/favoritemap/'+ this.id)).json();
+                    console.log(this.fav_map)
+                }
+            }">
+            <input type="text" x-model="player_id">
+            <button x-on:click="getMapByPlayerId">Show map</button>
+            <table>
+                <th>
+                    Map name
+                </th>
+                <tr>
+                    <td x-text="fav_map.map_name">
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="col-4">
+        <h2>Zoek een Map met het ID</h2>
+        <div x-data="{
+                map: null,
+                map_id:null,
+                async getMapById() {
+                id: null
+                if (this.map_id){
+                        this.id = this.map_id
+                    }
+                    this.map = await (await fetch('http://127.0.0.1:8000/get/map/'+ this.id)).json();
+                    console.log(this.map)
+                }
+            }">
+            <input type="text" x-model="map_id">
+            <button x-on:click="getMapById">Show map</button>
+            <table>
+                <th>
+                    Map name
+                </th>
+                <tr>
+                    <td x-text="map">
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+
+</br>
+<div x-data="{
+        maps: null,
+        amount: null,
+        async showMaps() {
+            filter: null
+            if (this.amount) {
+                this.filter = 'amount=' + this.amount
+            }
+            this.maps = await (await fetch('http://127.0.0.1:8000/map/random?' + this.filter)).json();
+        }
+    }">
+    <input type="text" x-model="amount" placeholder="amount">
+    <button x-on:click="showMaps" x-init="showMaps">Show random maps</button>
+    <table class="padding_top random_map">
+        <thead>
+        <tr>
+            <th colspan="2">Random maps</th>
+        </tr>
+        <tr>
+            <th>Map id</th>
+            <th>Map name</th>
+        </tr>
+        </thead>
+        <template x-for="map in maps">
+            <tr>
+                <td x-text="map.map_id">></td>
+                <td x-text="map.map_name"></td>
+            </tr>
+        </template>
+    </table>
+</div>
+
+
+</body>
+</html>
