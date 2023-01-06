@@ -17,7 +17,7 @@
         async getToken() {
            const paramsObj = {grant_type: '', username: this.email, password: this.password, scope: '', client_secret:''};
            const searchParams = new URLSearchParams(paramsObj);
-           this.token = await (await fetch('http://127.0.0.1:8000/token',
+           this.token = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/token',
            {
             method: 'POST',
             body: searchParams,
@@ -47,7 +47,7 @@
         players: null,
         token: null,
         async getAllPlayers() {
-            this.players = await (await fetch('http://127.0.0.1:8000/players/',
+            this.players = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/players/',
         {
             method: 'GET',
             headers: {
@@ -82,7 +82,7 @@
         operators: null,
         token: null,
         async getAllOperators() {
-            this.operators = await (await fetch('http://127.0.0.1:8000/operators/',
+            this.operators = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/operators/',
         {
             method: 'GET',
             headers: {
@@ -130,7 +130,7 @@
         mmr: null,
         region: null,
         async createPlayer() {
-            this.responsedata = await (await fetch('http://127.0.0.1:8000/player/',
+            this.responsedata = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/player/',
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -191,7 +191,7 @@
         secondary_weapon: null,
         side: null,
         async createOperator() {
-            this.responsedata = await (await fetch('http://127.0.0.1:8000/op/',
+            this.responsedata = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/op/',
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -238,7 +238,7 @@
         responsedata: null,
         map_name: null,
         async createMap() {
-            this.responsedata = await (await fetch('http://127.0.0.1:8000/map/',
+            this.responsedata = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/map/',
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -271,7 +271,7 @@
                 if (this.player_id){
                         this.id = this.player_id
                     }
-                    this.player = await (await fetch('http://127.0.0.1:8000/get/player/' + this.id)).json();
+                    this.player = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/get/player/' + this.id)).json();
                     console.log(this.player)
                 }
             }">
@@ -322,7 +322,7 @@
                 if (this.player_id){
                         this.id = this.player_id
                     }
-                    this.fav_map = await (await fetch('http://127.0.0.1:8000/get/player/favoritemap/'+ this.id)).json();
+                    this.fav_map = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/get/player/favoritemap/'+ this.id)).json();
                     console.log(this.fav_map)
                 }
             }">
@@ -351,7 +351,7 @@
                 if (this.map_id){
                         this.id = this.map_id
                     }
-                    this.map = await (await fetch('http://127.0.0.1:8000/get/map/'+ this.id)).json();
+                    this.map = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/get/map/'+ this.id)).json();
                     console.log(this.map)
                 }
             }">
@@ -382,7 +382,7 @@
             if (this.amount) {
                 this.filter = 'amount=' + this.amount
             }
-            this.maps = await (await fetch('http://127.0.0.1:8000/map/random?' + this.filter)).json();
+            this.maps = await (await fetch('https://system-service-dennisraaijmakers.cloud.okteto.net/map/random?' + this.filter)).json();
         }
     }">
     <input type="text" x-model="amount" placeholder="amount">
